@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<title>Bitchin API Implementation</title>
+</head>
+    <body>
+    <header>
+    <h1></h1>
+    <h2></h2>
+        <img alt="Book Image">
+        <p id="description"></p>
+    </header>
+        <main>
+        </main>
+        <footer>
+        </footer>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://www.googleapis.com/books/v1/volumes?q=the+hobbit", false);
+        xhr.send();
+        console.log(xhr.status); // if this returns 200, then you are in like Flynn
+        var bookObject = JSON.parse(xhr.responseText);
+        console.log(bookObject);
+        $('title').text(bookObject.items[0].volumeInfo.title);
+            $('h1').text(bookObject.items[0].volumeInfo.title);
+            $('h2').text(bookObject.items[0].volumeInfo.authors);
+        $('#description').append(bookObject.items[0].volumeInfo.description);
+            $('img').attr('src', bookObject.items[0].volumeInfo.imageLinks.thumbnail);
+    </script>
+    </body>
+</html>
