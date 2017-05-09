@@ -19,7 +19,7 @@
         padding: 20px;
         width: 500px;
         margin: 20px auto;
-        height: 500px;
+        height: 600px;
         color: #333;
       }
       .col:nth-of-type(1) {
@@ -43,6 +43,12 @@
 
 <body>
     <main>
+       <a href="index.html?isbn=0618640150">LOTR</a>
+       <form method="GET">
+           <input id="textField" type="text">
+           
+        </form>
+        <button id="submit">Submit</button>
         <h1></h1>
         <h3></h3>
         <h2></h2>
@@ -57,11 +63,13 @@
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
+    var queryString = document.URL.substring(document.URL.indexOf('=') + 1)
+    var bookObject;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.googleapis.com/books/v1/volumes?q=the+hobbit", false);
+    xhr.open("GET", "https://www.googleapis.com/books/v1/volumes?q=isbn:" + queryString, false);
     xhr.send();
     console.log(xhr.status); // if this returns 200, then you are in like Flynn
-    var bookObject = JSON.parse(xhr.responseText);
+    bookObject = JSON.parse(xhr.responseText);
     console.log(bookObject);
     $('body').css('background-image', 'url(' + bookObject.items[0].volumeInfo.imageLinks.thumbnail + ')');
     $('title').text(bookObject.items[0].volumeInfo.title);
@@ -70,6 +78,25 @@
     $('h2').text(bookObject.items[0].volumeInfo.authors); 
     $('img').attr('src', bookObject.items[0].volumeInfo.imageLinks.smallThumbnail);
     $('#description').text(bookObject.items[0].volumeInfo.description);
+    $('#submit').on('click', function(e) {        
+        var queryString = $('#textField').val();
+        console.log(queryString);
+        e.preventDefault;
+        xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://www.googleapis.com/books/v1/volumes?q=isbn:" + queryString, false);
+        xhr.send();
+        console.log(xhr.status); // if this returns 200, then you are in like Flynn
+        var bookObject = JSON.parse(xhr.responseText);
+        console.log(bookObject);
+        $('body').css('background-image', 'url(' + bookObject.items[0].volumeInfo.imageLinks.thumbnail + ')');
+        $('title').text(bookObject.items[0].volumeInfo.title);
+        $('h1').text(bookObject.items[0].volumeInfo.title);
+        $('h3').text(bookObject.items[0].volumeInfo.publishedDate);
+        $('h2').text(bookObject.items[0].volumeInfo.authors); 
+        $('img').attr('src', bookObject.items[0].volumeInfo.imageLinks.smallThumbnail);
+        $('#description').text(bookObject.items[0].volumeInfo.description);
+    });   
+    
     </script>
 </body>
 
